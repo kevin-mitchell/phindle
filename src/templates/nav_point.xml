@@ -1,0 +1,7 @@
+<navPoint class="{type}" id="{id}" playOrder="{order}">
+    <navLabel>
+        <text>{label}</text>
+    </navLabel>
+    <content src="{anchor}"/>
+    {children}
+</navPoint>
