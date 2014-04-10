@@ -1,7 +1,4 @@
-#Phindle*\** : Create Kindle Mobi files, easier#
-
-####*\** Phindle is an absolutely brilliant combination of the language "php" and the word "kindle." It doesn't get much better than this.
-
+#Phindle* : Create Kindle Mobi files, easier#
 
 ##Prerequisites##
 
@@ -14,3 +11,4 @@ Unfortunately, the command line utility `kindlegen` is a prerequisite of Phindle
 In short, Phindle provides a ebook skeleton that can be filled out with your content, and then Phindle will create friendly static html files (temporarily!) to feed `kindlegen` with. Additionally Phindle provides a number of useful ways that you can provide content.
 
 
+####* Phindle is an absolutely brilliant combination of the language "php" and the word "kindle." It doesn't get much better than this.
