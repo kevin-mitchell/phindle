@@ -21,6 +21,8 @@ class Content implements ContentInterface{
 	public function setHtml($html)
 	{
 		$this->html = $html;
+
+		return $this;
 	}
 
 	/**
@@ -30,6 +32,8 @@ class Content implements ContentInterface{
 	public function setSections($sections)
 	{
 		$this->sections = $sections;
+
+		return $this;
 	}
 
 	/**
@@ -39,6 +43,8 @@ class Content implements ContentInterface{
 	public function setTitle($title)
 	{
 		$this->title = $title;
+
+		return $this;
 	}
 
 
