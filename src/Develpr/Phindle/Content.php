@@ -23,10 +23,11 @@ class Content implements ContentInterface{
        return $this->uniqueIdentifier;
     }
 
-
-    public function setUniqueIdentifier()
+    public function setUniqueIdentifier($uniqueIdentifier)
     {
-        return $this->uniqueIdentifier;
+        $this->uniqueIdentifier = $uniqueIdentifier;
+
+		return $this;
     }
 
     /**
@@ -107,8 +108,9 @@ class Content implements ContentInterface{
 
     public function setPosition($position)
     {
-        if(!isin)
         $this->position = $position;
+
+		return $this;
     }
 
 	/**

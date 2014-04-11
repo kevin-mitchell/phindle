@@ -12,7 +12,14 @@ use \DOMNodeList;
  */
 class HtmlElementExtractor{
 
-	public function extractTag($tag, $html)
+	/**
+	 * Extract a tag (<a> <img> <h2> etc) from
+	 *
+	 * @param $tag
+	 * @param $html
+	 * @return DOMNodeList
+	 */
+	public function extractTags($tag, $html)
 	{
 		$DOM = new DOMDocument;
 		$DOM->loadHTML($html);
@@ -46,7 +53,7 @@ class HtmlElementExtractor{
 
 	public function extractCss($html)
 	{
-		$items = $this->extractTag('link', $html);
+		$items = $this->extractTags('link', $html);
 
 		return $this->extractAttribute('href', $items);
 
@@ -54,7 +61,7 @@ class HtmlElementExtractor{
 
 	public function extractImg($html)
 	{
-		$items = $this->extractTag('img', $html);
+		$items = $this->extractTags('img', $html);
 
 		return $this->extractAttribute('src', $items);
 
