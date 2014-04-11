@@ -9,7 +9,7 @@
  * Class OpfRenderer
  * @package Develpr\Phindle
  */
-class OpfRenderer{
+class OpfRenderer extends XmlRenderer{
 
 	const LANGUAGE_ENGLISH_US = 'en-us';
 	const LANGUAGE_ENGLISH_GB = 'en-gb';
