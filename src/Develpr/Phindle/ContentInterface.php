@@ -3,6 +3,8 @@
 
 interface ContentInterface{
 
+    public function getUniqueIdentifier();
+
 	/**
 	 * Echo the body of the content as HTML
 	 */

@@ -5,6 +5,7 @@ class Content implements ContentInterface{
 	private $html;
 	private $sections;
 	private $title;
+    private $position;
 	private $uniqueIdentifier;
 
 	function __construct()
@@ -13,7 +14,22 @@ class Content implements ContentInterface{
 		$this->uniqueIdentifier = round(time()/2) . "" . rand(11111, 99999);
 	}
 
-	/**
+    /**
+     * Returns a unique Identifier
+     * @return string
+     */
+    public function getUniqueIdentifier()
+    {
+       return $this->uniqueIdentifier;
+    }
+
+
+    public function setUniqueIdentifier()
+    {
+        return $this->uniqueIdentifier;
+    }
+
+    /**
 	 * Set the HTML that will be output
 	 *
 	 * @param mixed $html
@@ -86,8 +102,14 @@ class Content implements ContentInterface{
 	 */
 	public function getPosition()
 	{
-		// TODO: Implement getPosition() method.
+		return $this->position;
 	}
+
+    public function setPosition($position)
+    {
+        if(!isin)
+        $this->position = $position;
+    }
 
 	/**
 	 * note: we're using a "manual" approach here because the other options are
