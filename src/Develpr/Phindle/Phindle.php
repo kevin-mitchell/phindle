@@ -5,16 +5,13 @@ class Phindle{
 
 	private $content;
 	private $toc;
-	private $outputDirectory;
-    private $metadata;
-    private $errors;
+    	private $metadata;
+    	private $errors;
+	private $writer;
 
 	public function __construct($data = array())
 	{
-		if(array_key_exists('outputDirectory', $data))
-			$this->outputDirectory = $data['outputDirectory'];
-
-        $this->metadata = $data;
+	       	$this->metadata = $data;
 
 		$this->content = array();
 	}
@@ -105,13 +102,5 @@ class Phindle{
 		return $this;
 	}
 
-	private function writeFile($fileName, $fileContents)
-	{
-
-		$success = file_put_contents($fileName, "\xEF\xBB\xBF".  $fileContents);
-
-		return $success === false ? false : true;
-
-	}
 
 }
