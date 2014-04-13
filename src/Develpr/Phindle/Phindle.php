@@ -28,10 +28,10 @@ class Phindle{
             $this->fileHandler = $fileHandler;
 
         if(is_null($opfRenderer))
-            $this->opfRenderer = new OpfRenderer();
+            $this->opfRenderer = new OpfRenderer(new Templatish(), new HtmlElementExtractor());
 
         if(is_null($ncxRenderer))
-            $this->ncxRenderer = new NcxRenderer();
+            $this->ncxRenderer = new NcxRenderer(new Templatish());
 
     }
 
@@ -48,18 +48,11 @@ class Phindle{
         if(count($result) > 0)
             throw new \Exception("Invalid Phidle. Additional configuration options required. " . implode('. ', $result));
 
-
-        $test = preg_replace("/[^A-Za-z0-9]/", '', $this->getAttribute('string'));
-
-        die($test);
-        die($this->getAttribute('uniqu'));
-
-        $this->setAttribute('uniqueId', preg_replace("/[^A-Za-z0-9 ]/", '', $this->getAttribute('string')));
-        die($this->getAttribute('uniqueId'));
+		$this->generateUniqueId();
 
         $this->sortContent();
 
-//        $this->fileHandler->writeTempFile($this->ncxRenderer->
+        $this->fileHandler->writeTempFile($this->getAttribute('uniqueId') . '.opf', $this->opfRenderer->render($this->attributes, $this->content));
 
         foreach($this->content as $content)
         {
@@ -67,7 +60,7 @@ class Phindle{
             $this->fileHandler->writeTempFile($content->getUniqueIdentifier() . '.html', $content->getHtml());
         }
 
-
+		die("HI");
         //Remove all temporary files
         $this->fileHandler->clean();
 
@@ -106,14 +99,29 @@ class Phindle{
 		if(!$this->attributeExists('description'))
             $errors[] = 'A description is required.';
 
-		if((is_null($this->fileHandler) || !$this->fileHandler) && !$this->attributeExists('path'))
-		{
-			$errors[] = "A FileHandler must be created to save files, or the path must be set so a FileHandler can be created.";
-		}
-
-
         return $errors;
     }
+
+
+	/**
+	 * Generate a unique id for this Phindle based on title and current timestamp.
+	 *
+	 * @return string
+	 */
+	private function generateUniqueId()
+	{
+		$fileTitlePrefix = preg_replace("/[^A-Za-z0-9]/", '', $this->getAttribute('title') . "");
+
+		if(strlen($fileTitlePrefix) > 10)
+				$fileTitlePrefix = substr($fileTitlePrefix, 0, 10);
+
+		$uniqueId = $fileTitlePrefix . "" . date("ymdHis");
+
+		$this->setAttribute('uniqueId', $uniqueId);
+
+		return $uniqueId;
+	}
+
 
 
 	/**
@@ -137,7 +145,7 @@ class Phindle{
 	/**
 	 * Add new Table of Contents (toc) to Phindle document
 	 *
-	 * @param IndexInterface $index
+	 * @param TableOfContentsInterface $toc
 	 * @return $this
 	 * @throws \InvalidArgumentException
 	 */

@@ -3,7 +3,7 @@
   The unique identifier in <package unique-identifier=”XYZ”> is a reference to
   the identifier specified in <metadata> as <dc:Identifier id=”XYZ”>.
 -->
-<package xmlns="http://www.idpf.org/2007/opf" version="2.0" unique-identifier="{uniqueIdentifier}">
+<package xmlns="http://www.idpf.org/2007/opf" version="2.0" unique-identifier="{uniqueId}">
 
     <!--
         Metadata:
@@ -39,7 +39,7 @@
 
         <!-- The ISBN of your book goes here -->
 
-        <dc:identifier id="{uniqueIdentifier}" opf:scheme="ISBN">{isbn}</dc:identifier>
+        <dc:identifier id="{uniqueId}" opf:scheme="ISBN">{isbn}</dc:identifier>
 
         <!-- The author of the book. For multiple authors, use multiple <dc:Creator> tags.
              Additional contributors whose contributions are secondary to those listed in

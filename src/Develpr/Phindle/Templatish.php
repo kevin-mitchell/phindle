@@ -26,23 +26,20 @@ class Templatish{
 		return $this;
 	}
 
-	public function writeTemplate($path = false)
+	public function buildTemplate($template = false, $data = false)
 	{
-		$template = file_get_contents($this->templatePath);
+		if($template === false)
+			$template = file_get_contents($this->templatePath);
 
-		foreach($this->data as $key => $value)
+		if($data === false)
+			$data = $this->data;
+
+		foreach($data as $key => $value)
 		{
-			$template = str_replace($key, $value, $template);
+			$template = str_replace('{'.$key.'}', $value, $template);
 		}
 
-		if($path === false)
-			return $template;
-
-		file_put_contents($path, $template);
-
 		return $template;
-
 	}
-
 
 }

@@ -9,6 +9,10 @@ class FileHandler{
     {
         $this->basePath = $this->addTrailingSlash($basePath);
 
+		//Check that the base path is writable
+		if(!is_writable($this->basePath))
+			throw new \Exception('The path provided is not writeable by PHP. Considering using a different path or change permissions for ' . $this->basePath);
+
         $this->tempDirectory = $this->addTrailingSlash($this->removeLeadingSlash($tempDirectory));
 
         mkdir($this->basePath . $this->tempDirectory);
@@ -49,6 +53,12 @@ class FileHandler{
 		return (substr($path, 0, 1) == '/' ? substr_replace($path, "", 0, 1) : $path);
 	}
 
+	/**
+	 * Add a trailing slash to a path
+	 *
+	 * @param $path
+	 * @return string
+	 */
 	private function addTrailingSlash($path)
 	{
 		return (substr($path, -1) == '/' ? $path : $path . '/');
