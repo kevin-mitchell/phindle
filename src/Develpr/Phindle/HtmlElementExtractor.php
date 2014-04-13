@@ -50,6 +50,20 @@ class HtmlElementExtractor{
 		return $return;
 	}
 
+    /**
+     * This can be used (optionally!) to extract "sections" from an html file so that Phindle can attempt to
+     * build a better/automatic section navigation within each content object. Think of this as sections in a
+     * chapter, where the content might represent an entire chapter.
+     *
+     * @param $html
+     * @return array
+     */
+    public function extractSections($html)
+    {
+        $items = $this->extractTags('link', $html);
+
+        return $this->extractAttribute('href', $items);
+    }
 
 	public function extractCss($html)
 	{

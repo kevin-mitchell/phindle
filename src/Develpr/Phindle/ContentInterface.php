@@ -1,6 +1,15 @@
 <?php namespace Develpr\Phindle;
 
-
+/**
+ * This interface is designed to provide a guide for users who may want to use Phindle with their own logic.
+ * Any class that implements this interface can be added to a Phindle as content. Some ideas that could be
+ * added to a concrete implementation of this interface include data bindings at time of processing. In other words,
+ * rather that passing in a "static" html string to this content object, a templating engine could be used and data
+ * could be passed in to render the template.
+ *
+ * Interface ContentInterface
+ * @package Develpr\Phindle
+ */
 interface ContentInterface{
 
     public function getUniqueIdentifier();
@@ -23,7 +32,7 @@ interface ContentInterface{
 	 * @param string $id optionally provide the id (id="chapter_1_1") which will be added to anchor tag
 	 * @return string
 	 */
-	public function getAnchor($id = "");
+	public function getAnchorPath($id = "");
 
 	/**
 	 * Provides the relative position of the content. This is for sorting purposes and is what will determine

@@ -19,4 +19,9 @@ class OpfRenderer extends XmlRenderer{
 	const LANGUAGE_FRENCH = 'fr';
 
 
+    public function getXml()
+    {
+
+    }
+
 }
