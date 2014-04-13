@@ -7,17 +7,37 @@ class FileHandler{
 
     public function __construct($basePath, $tempDirectory)
     {
-        $this->basePath = $this->addTrailingSlash($basePath);;
-        $this->tempDirectory = $this->removeLeadingSlash($tempDirectory);
+        $this->basePath = $this->addTrailingSlash($basePath);
+
+        $this->tempDirectory = $this->addTrailingSlash($this->removeLeadingSlash($tempDirectory));
+
+        mkdir($this->basePath . $this->tempDirectory);
+    }
+
+    public function writeTempFile($filename, $fileContents)
+    {
+        $this->writeFile($this->tempDirectory . $filename, $fileContents);
     }
 
 	public function writeFile($fileName, $fileContents)
 	{
+		$success = file_put_contents($this->basePath . $fileName, $fileContents);
 
-		$success = file_put_contents($fileName, "\xEF\xBB\xBF".  $fileContents);
-
-		return $success === false ? false : true;
+		return $success !== false;
 	}
+
+    public function clean()
+    {
+        $files = glob($this->basePath . $this->tempDirectory . '*', GLOB_MARK);
+        foreach ($files as $file) {
+            if (is_dir($file)) {
+                self::deleteDir($file);
+            } else {
+                unlink($file);
+            }
+        }
+        rmdir($this->basePath . $this->tempDirectory);
+    }
 
 	/**
 	 * Removing a leading slash from a path

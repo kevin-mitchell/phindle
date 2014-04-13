@@ -2,7 +2,7 @@
 <!--
   The unique identifier in <package unique-identifier=”XYZ”> is a reference to
   the identifier specified in <metadata> as <dc:Identifier id=”XYZ”>.
--->$this->validate()
+-->
 <package xmlns="http://www.idpf.org/2007/opf" version="2.0" unique-identifier="{uniqueIdentifier}">
 
     <!--

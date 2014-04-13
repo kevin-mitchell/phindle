@@ -7,28 +7,71 @@ class Phindle{
 	private $toc;
     private $attributes;
     private $fileHandler;
+    private $opfRenderer;
+    private $ncxRenderer;
 
-	public function __construct($data = array(), FileHandler $handler = null)
+    /**
+     * @param array $data
+     * @param FileHandler $fileHandler
+     * @param NcxRenderer $ncxRenderer
+     * @param OpfRenderer $opfRenderer
+     */
+    public function __construct($data = array(), FileHandler $fileHandler = null, NcxRenderer $ncxRenderer = null, OpfRenderer $opfRenderer = null)
 	{
 		$this->attributes = $data;
 
 		$this->content = array();
 
+        if(is_null($fileHandler))
+		    $this->createFileHandler();
+        else
+            $this->fileHandler = $fileHandler;
 
-		$this->fileHandler = $handler;
+        if(is_null($opfRenderer))
+            $this->opfRenderer = new OpfRenderer();
+
+        if(is_null($ncxRenderer))
+            $this->ncxRenderer = new NcxRenderer();
+
+    }
 
 
-	}
+    /**
+     * Create a new Mobi document from data provided
+     *
+     * @throws \Exception
+     */
+    public function process()
+    {
+        $result = $this->validate();
 
-	public function setAttribute($key, $value)
-	{
-		$this->attributes[$key] = $value;
-	}
+        if(count($result) > 0)
+            throw new \Exception("Invalid Phidle. Additional configuration options required. " . implode('. ', $result));
 
-	public function getAttribute($key)
-	{
-		return array_key_exists($key, $this->attributes) ? $this->attributes[$key] : null;
-	}
+
+        $test = preg_replace("/[^A-Za-z0-9]/", '', $this->getAttribute('string'));
+
+        die($test);
+        die($this->getAttribute('uniqu'));
+
+        $this->setAttribute('uniqueId', preg_replace("/[^A-Za-z0-9 ]/", '', $this->getAttribute('string')));
+        die($this->getAttribute('uniqueId'));
+
+        $this->sortContent();
+
+//        $this->fileHandler->writeTempFile($this->ncxRenderer->
+
+        foreach($this->content as $content)
+        {
+            /** @var \Develpr\Phindle\ContentInterface $content */
+            $this->fileHandler->writeTempFile($content->getUniqueIdentifier() . '.html', $content->getHtml());
+        }
+
+
+        //Remove all temporary files
+        $this->fileHandler->clean();
+
+    }
 
     public function valid()
     {
@@ -72,18 +115,6 @@ class Phindle{
         return $errors;
     }
 
-	/**
-	 * Set the base output directory for the mobi file as we as temp files
-	 *
-	 * @param $outputDirectory
-	 * @return $this
-	 */
-	public function setOutputDirectory($outputDirectory)
-	{
-		$this->outputDirectory = $outputDirectory;
-
-		return $this;
-	}
 
 	/**
 	 *
@@ -120,7 +151,14 @@ class Phindle{
 		return $this;
 	}
 
-	private function sortByPosition(ContentInterface $c1, ContentInterface $c2)
+    /**
+     * Method used for sorting with usort by position of Content
+     *
+     * @param ContentInterface $c1
+     * @param ContentInterface $c2
+     * @return int
+     */
+    private function sortByPosition(ContentInterface $c1, ContentInterface $c2)
 	{
 		if($c1->getPosition() == $c2->getPosition())
 			return 0;
@@ -128,7 +166,13 @@ class Phindle{
 		return ($c1->getPosition() < $c2->getPosition()) ? -1 : 1;
 	}
 
-	private function sortContent()
+    /**
+     * Sorts the content of the Phindle file based on the order provided by each content's getPosition
+     * response.
+     *
+     * @return $this
+     */
+    private function sortContent()
 	{
 		usort($this->content, array($this, 'sortByPosition'));
 
@@ -149,29 +193,21 @@ class Phindle{
 	}
 
 
-	/**
-	 * Create a new Mobi document from data provided
-	 *
-	 * @throws \Exception
-	 */
-	public function process()
-	{
-		$result = $this->validate();
-
-		if(count($result) > 0)
-			throw new \Exception("Invalid Phidle. Additional configuration options required. " . implode('. ', $result));
-
-		if(!$this->fileHandler)
-			$this->fileHandler = $this->createFileHandler();
-
-
-		$this->sortContent();
-
-	}
 
 	private function attributeExists($attribute)
 	{
 		return !(!array_key_exists($attribute, $this->attributes) || strlen($this->attributes[$attribute]) < 1);
 	}
+
+
+    public function setAttribute($key, $value)
+    {
+        $this->attributes[$key] = $value;
+    }
+
+    public function getAttribute($key)
+    {
+        return array_key_exists($key, $this->attributes) ? $this->attributes[$key] : null;
+    }
 
 }

@@ -1,5 +1,12 @@
 <?php namespace Develpr\Phindle;
 
+/**
+ * This is a concrete implementation of the ContentInterface for use when creating Phindle files. The implementation
+ * is should provide all functionality required to create a Phindle file with multiple content areas.
+ *
+ * Class Content
+ * @package Develpr\Phindle
+ */
 class Content implements ContentInterface{
 
 	private $html;
@@ -90,7 +97,7 @@ class Content implements ContentInterface{
 	 * @param string $id optionally provide the id (id="chapter_1_1") which will be added to anchor tag
 	 * @return string
 	 */
-	public function getAnchor($id = "")
+	public function getAnchorPath($id = "")
 	{
 		return strlen($id > 0) ? $this->uniqueIdentifier . '.html#' . $id : $this->uniqueIdentifier . '.html';
 	}

@@ -24,7 +24,6 @@ $phindle = new Phindle(array(
 ));
 
 
-
 $content = new Content();
 
 $content->setHtml($html1)->setTitle('Title 1')->setPosition(1)->setUniqueIdentifier('page_1');
@@ -40,5 +39,7 @@ $phindle->addContent($content);
 
 
 $phindle->process();
+
+
 
 $hi = "HI";
