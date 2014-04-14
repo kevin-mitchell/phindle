@@ -70,6 +70,15 @@ class OpfRenderer extends XmlRenderer{
 		$this->buildManifest();
 		$this->buildSpine();
 
+        if($this->getValue('isbn'))
+        {
+            $this->setValue('isbn', '<dc:identifier id="'.$this->getValue('uniqueId').'" opf:scheme="ISBN">'.$this->getValue('isbn').'</dc:identifier>');
+        }
+        else
+        {
+            $this->setValue('isbn', '');
+        }
+
 	}
 
 	private function buildManifest()
@@ -111,13 +120,28 @@ class OpfRenderer extends XmlRenderer{
 
 		foreach($imageFiles as $imageFile)
 		{
-			if(!$this->getValue('manifestTemplate'))
-				$template = '<item id="{id}" media-type="{type}" href="{path}"/>' . "\n";
-			else
-				$template = $this->getValue('manifestTemplate');
-
 			$manifest .= $this->templatish->buildTemplate($template, $imageFile);
 		}
+
+        if($this->getValue('cover') !== false)
+        {
+            $manifest .= $this->templatish->buildTemplate($template, array(
+                'path'  => $this->getValue('staticResourcePath') . $this->data['cover'],
+                'type'  => $this->estimateMediaType($this->data['cover']),
+                'id'    => 'cover'
+            )) . "\n";
+            $this->setValue('cover', '<meta name="cover" content="cover" />');
+        }
+        else
+        {
+            $this->data('cover', '');
+        }
+
+        $manifest .= $this->templatish->buildTemplate($template, array(
+            'path'  => $this->getValue('uniqueId') . '.ncx',
+            'type'  => 'application/x-dtbncx+xml',
+            'id'    => $this->getValue('uniqueId') . '_TOC'
+        )) . "\n";
 
 		$this->data['manifest'] = $manifest;
 

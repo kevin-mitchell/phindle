@@ -20,7 +20,9 @@ $phindle = new Phindle(array(
 	'language' => \Develpr\Phindle\OpfRenderer::LANGUAGE_ENGLISH_US,
 	'subject' => 'Computers',
 	'description' => 'A great book about stuff',
-	'path'	=> __dir__
+	'path'	=> __dir__,
+    'cover' => 'GraphicsWelcome/WImage-cover.gif',
+    'isbn'  => '123456789123456'
 ));
 
 

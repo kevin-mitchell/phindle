@@ -35,11 +35,14 @@
         <!-- Cover [mandatory]. The cover image must be specified in <manifest> and referenced from
         this <meta> element with a name="cover" attribute.
         -->
-        <meta name="cover" content="{cover}" />
+
+        {cover}
+        <!-- <meta name="cover" content="{cover}" /> -->
 
         <!-- The ISBN of your book goes here -->
 
-        <dc:identifier id="{uniqueId}" opf:scheme="ISBN">{isbn}</dc:identifier>
+        {isbn}
+        <!-- <dc:identifier id="{uniqueId}" opf:scheme="ISBN">{isbn}</dc:identifier> -->
 
         <!-- The author of the book. For multiple authors, use multiple <dc:Creator> tags.
              Additional contributors whose contributions are secondary to those listed in
