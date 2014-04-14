@@ -3,11 +3,23 @@
 class TableOfContents implements ContentInterface
 {
 
-    const tableOfContentsUniqudId = 'toc';
+    private $html = "";
+    private $templatish;
+    private $htmlExtractor;
+
+    const tableOfContentsUniqueId = 'toc';
+
+
+    function __construct(Templatish $templatish, HtmlElementExtractor $elementExtractor)
+    {
+        $this->templatish = $templatish;
+        $this->htmlExtractor = $elementExtractor;
+    }
+
 
     public function getUniqueIdentifier()
     {
-        return 'toc';
+        return self::tableOfContentsUniqueId;
     }
 
     /**
@@ -15,7 +27,16 @@ class TableOfContents implements ContentInterface
      */
     public function getHtml()
     {
-        // TODO: Implement getHtml() method.
+        return $this->html;
+    }
+
+    /**
+     * Generate the table of contents 
+     * @param $contents
+     */
+    public function generate($contents)
+    {
+
     }
 
     /**
@@ -36,7 +57,7 @@ class TableOfContents implements ContentInterface
      */
     public function getAnchorPath($id = "")
     {
-        return ""
+        return self::tableOfContentsUniqueId . '.html' . (strlen($id) > 0) ? '#' . $id : '';
     }
 
     /**
@@ -64,7 +85,7 @@ class TableOfContents implements ContentInterface
      */
     public function getSections()
     {
-        // TODO: Implement getSections() method.
+        return array();
     }
 
 }

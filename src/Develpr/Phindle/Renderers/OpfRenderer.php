@@ -39,7 +39,7 @@ class OpfRenderer extends XmlRenderer{
 			$this->htmlParser = $htmlParser;
 	}
 
-	public function render(array $attributes, array $content)
+	public function render(array $attributes, array $content, ContentInterface $toc)
 	{
 		$this->data = $attributes;
 		$this->content = $content;
