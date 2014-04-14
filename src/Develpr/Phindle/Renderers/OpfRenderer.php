@@ -76,16 +76,19 @@ class OpfRenderer extends XmlRenderer{
 	{
 		$manifest = "";
 
+		//Normally we'll use a template manifest item snippet, but we'll allow customization by the user
+		if(!$this->getValue('manifestTemplate'))
+			$template = '<item id="{id}" media-type="{type}" href="{path}"/>' . "\n";
+		else
+			$template = $this->getValue('manifestTemplate');
+
+
 		$imageFiles = array();
 		foreach($this->content as $content)
 		{
 			/** @var ContentInterface $content */
 
-			if(!$this->getValue('manifestTemplate'))
-				$template = '<item id="{id}" media-type="{type}" href="{path}"/>' . "\n";
-			else
-				$template = $this->getValue('manifestTemplate');
-
+			//Add content to manifest (html files)
 			$manifest .= $this->templatish->buildTemplate($template, array(
 				'type' => 'application/xhtml+xml',
 				'id'	=> self::MANIFEST_ITEM_PREFIX . $content->getUniqueIdentifier(),
@@ -122,12 +125,25 @@ class OpfRenderer extends XmlRenderer{
 
 	private function buildSpine()
 	{
-		$spin = "";
+		$spines = "";
 		foreach($this->content as $content)
 		{
 			/** @var ContentInterface $content */
+			if(!$this->getValue('manifestTemplate'))
+				$template = '<item id="{id}" media-type="{type}" href="{path}"/>' . "\n";
+			else
+				$template = $this->getValue('manifestTemplate');
+
+			$spines .= $this->templatish->buildTemplate($template, array(
+				'type' => 'application/xhtml+xml',
+				'id'	=> self::MANIFEST_ITEM_PREFIX . $content->getUniqueIdentifier(),
+				'path'	=> $content->getAnchorPath()
+			));
 
 		}
+
+
+
 	}
 
 	/**
