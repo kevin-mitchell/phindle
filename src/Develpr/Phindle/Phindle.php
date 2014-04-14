@@ -16,7 +16,7 @@ class Phindle{
      * @param NcxRenderer $ncxRenderer
      * @param OpfRenderer $opfRenderer
      */
-    public function __construct($data = array(), FileHandler $fileHandler = null, NcxRenderer $ncxRenderer = null, OpfRenderer $opfRenderer = null)
+    public function __construct($data = array(), FileHandler $fileHandler = null, NcxRenderer $ncxRenderer = null, OpfRenderer $opfRenderer = null, ContentInterface $tableOfContents = null)
 	{
 		$this->attributes = $data;
 
@@ -32,6 +32,9 @@ class Phindle{
 
         if(is_null($ncxRenderer))
             $this->ncxRenderer = new NcxRenderer(new Templatish());
+
+        if(is_null($tableOfContents))
+            $this->toc = new TableOfContents(new Templatish(), new HtmlElementExtractor());
 
     }
 
@@ -52,7 +55,7 @@ class Phindle{
 
         $this->sortContent();
 
-        $this->fileHandler->writeTempFile($this->getAttribute('uniqueId') . '.opf', $this->opfRenderer->render($this->attributes, $this->content));
+        $this->fileHandler->writeTempFile($this->getAttribute('uniqueId') . '.opf', $this->opfRenderer->render($this->attributes, $this->content, $this->toc));
 
         foreach($this->content as $content)
         {
@@ -217,5 +220,16 @@ class Phindle{
     {
         return array_key_exists($key, $this->attributes) ? $this->attributes[$key] : null;
     }
+
+    public function setToc(ContentInterface $toc)
+    {
+        $this->toc = $toc;
+    }
+
+    public function getToc()
+    {
+        return $this->toc;
+    }
+
 
 }

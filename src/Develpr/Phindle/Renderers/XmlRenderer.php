@@ -19,7 +19,7 @@ abstract class XmlRenderer{
 		$this->setupTemplate();
 	}
 
-	abstract public function render(array $attributes, array $content);
+	abstract public function render(array $attributes, array $content, ContentInterface $tableOfContents = null);
 
 	abstract protected function prepareForRender();
 
