@@ -53,6 +53,18 @@ class Phindle{
 
 		$this->generateUniqueId();
 
+
+        //If a default instance of TableOfContents provided by this package was used then we need to tell
+        //the TableOfContents instance about the contents of the Phindle file. It is not required that you use
+        //TableOfContents, as long as you implement the ContentsInterface and so in these cases the generate
+        //method may not exist.
+        if($this->toc instanceof TableOfContents)
+        {
+            $this->sortContent();
+            $this->toc->generate($this->content);
+        }
+
+        $this->addContent($this->toc);
         $this->sortContent();
 
         $this->fileHandler->writeTempFile($this->getAttribute('uniqueId') . '.opf', $this->opfRenderer->render($this->attributes, $this->content, $this->toc));

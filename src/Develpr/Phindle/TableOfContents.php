@@ -3,6 +3,8 @@
 class TableOfContents implements ContentInterface
 {
 
+    const DEFAULT_TOC_TEMPLATE = 'table_of_contents.html';
+
     private $html = "";
     private $templatish;
     private $htmlExtractor;
@@ -31,12 +33,33 @@ class TableOfContents implements ContentInterface
     }
 
     /**
-     * Generate the table of contents 
+     * Generate the table of contents
      * @param $contents
      */
     public function generate($contents)
     {
+        $html = '';
 
+        foreach($contents as $content)
+        {
+            $html .= $this->getContentToC($content);
+        }
+
+        $this->templatish->setData(array('toc' => $html));
+        $this->templatish->setTemplate(self::DEFAULT_TOC_TEMPLATE);
+        $this->html = $this->templatish->buildTemplate();
+
+        return true;
+    }
+
+    public function getContentToC(ContentInterface $content)
+    {
+        $html = '';
+
+        $html .= '<h3><strong><a href="'.$content->getAnchorPath().'">'.$content->getTitle().'</a></strong></h3>';
+
+
+        return $html;
     }
 
     /**
