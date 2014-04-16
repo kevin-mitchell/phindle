@@ -56,8 +56,37 @@ class TableOfContents implements ContentInterface
     {
         $html = '';
 
-        $html .= '<h3><strong><a href="'.$content->getAnchorPath().'">'.$content->getTitle().'</a></strong></h3>';
+        $html .= '<h3><strong><a href="'.$content->getAnchorPath().'">'.$content->getTitle().'</a></strong></h3>' . "\r\n";
 
+        $sections = $content->getSections();
+
+        if($sections)
+            $html .= $this->getSectionHtml($sections, $content);
+
+        $html .= "<br /><br />"  . "\r\n";
+
+        return $html;
+    }
+
+    public function getSectionHtml(array $sections, ContentInterface $content)
+    {
+        $html = '';
+
+        ksort($sections);
+
+        if(count($sections) > 0)
+            $html .= '<br /><ul>';
+
+        foreach($sections as $section)
+        {
+            //todo: this is just an array and could contain anything. Too much of a convention.
+            //todo: consider using an array of some new object?
+            $html .= '<li><a href="'.$content->getAnchorPath($section['id']).'">'.$section['title'].'</a></li>' . "\r\n";
+
+        }
+
+        if(count($sections) > 0)
+            $html .= '</ul>' . "\r\n";
 
         return $html;
     }

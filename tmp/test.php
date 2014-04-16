@@ -29,6 +29,24 @@ $phindle = new Phindle(array(
 $content = new Content();
 
 $content->setHtml($html1)->setTitle('Title 1')->setPosition(1)->setUniqueIdentifier('page_1');
+$content->setSections(array(
+    1 => array(
+       'id' => 'id_1.1',
+       'title' => '1.1 Views of Kindle'
+    ),
+    2 => array(
+       'id' => 'id_1.2',
+       'title' => '1.2 Getting Around'
+    ),
+    3 => array(
+        'id' => 'id_1.3',
+        'title' => '1.3 Entering Text'
+    ),
+    4 => array(
+        'id' => 'id_1.4',
+        'title' => '1.4 Status Indicators'
+    ),
+));
 
 $content1 = new Content();
 

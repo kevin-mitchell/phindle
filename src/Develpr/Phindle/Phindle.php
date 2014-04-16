@@ -64,6 +64,8 @@ class Phindle{
             $this->toc->generate($this->content);
         }
 
+        //We will add the table of contents as a "normal" content element as well because it will implement getHtml
+        //and so we can write it out as a temporary static file as needed
         $this->addContent($this->toc);
         $this->sortContent();
 
