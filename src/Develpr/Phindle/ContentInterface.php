@@ -43,8 +43,13 @@ interface ContentInterface{
 	public function getPosition();
 
 	/**
-	 * note: we're using a "manual" approach here because the other options are
-	 * 1) require a user nest ContentInterface objects within each other, which increases the complexity
+     * todo: make this less of a convention, use an interface perhaps?
+     *
+     * This allows an author to specify sections within the content object.
+     *
+	 * Note we're using a "manual" approach here because the other options are
+	 * 1) require a user nest ContentInterface objects within each other, which increases the complexity of actually
+     * building an ebook with Phindle
 	 * 2) parse the html for this ContentInterface's toHtml result and figure out where the ids are, which is not
 	 *    possible without coming up with a convention which again creates extra work/learning on users part
 	 *
@@ -52,7 +57,7 @@ interface ContentInterface{
 	 * 	sectionTitle 		=> 1.1 Detail Point
 	 *  id					=> blah_11
 	 *  content (optional)	=> array( sectionTitle => ... id => ... content => array( ... ) )
-	 * @return mixed
+	 * @return array
 	 */
 	public function getSections();
 

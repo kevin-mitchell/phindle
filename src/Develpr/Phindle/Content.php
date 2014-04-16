@@ -134,6 +134,6 @@ class Content implements ContentInterface{
 	 */
 	public function getSections()
 	{
-		// TODO: Implement getSections() method.
+		return $this->sections;
 	}
 }
