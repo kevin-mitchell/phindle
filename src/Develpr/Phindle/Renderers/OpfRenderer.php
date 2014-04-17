@@ -166,6 +166,7 @@ class OpfRenderer extends XmlRenderer{
 
 		}
 
+        $this->setValue('spine', $spines);
 
 
 	}

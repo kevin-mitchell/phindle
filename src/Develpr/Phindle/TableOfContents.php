@@ -109,7 +109,10 @@ class TableOfContents implements ContentInterface
      */
     public function getAnchorPath($id = "")
     {
-        return self::tableOfContentsUniqueId . '.html' . (strlen($id) > 0) ? '#' . $id : '';
+        $base = $this->getUniqueIdentifier() . '.html';
+        $id = (strlen($id) > 0) ? '#' . $id : '';
+
+        return $base . $id;
     }
 
     /**
