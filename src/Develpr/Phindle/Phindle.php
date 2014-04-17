@@ -53,6 +53,9 @@ class Phindle{
 
 		$this->generateUniqueId();
 
+        $this->sortContent();
+
+        $this->setAttribute('start',reset($this->content)->getAnchorPath());
 
         //If a default instance of TableOfContents provided by this package was used then we need to tell
         //the TableOfContents instance about the contents of the Phindle file. It is not required that you use
@@ -60,7 +63,6 @@ class Phindle{
         //method may not exist.
         if($this->toc instanceof TableOfContents)
         {
-            $this->sortContent();
             $this->toc->generate($this->content);
         }
 
@@ -69,7 +71,10 @@ class Phindle{
         $this->addContent($this->toc);
         $this->sortContent();
 
+        $this->setAttribute('toc', $this->toc->getAnchorPath());
+
         $this->fileHandler->writeTempFile($this->getAttribute('uniqueId') . '.opf', $this->opfRenderer->render($this->attributes, $this->content, $this->toc));
+        $this->fileHandler->writeTempFile($this->getAttribute('uniqueId') . '.ncx', $this->ncxRenderer->render($this->attributes, $this->content));
 
         foreach($this->content as $content)
         {
