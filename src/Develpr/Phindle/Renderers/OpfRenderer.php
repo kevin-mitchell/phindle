@@ -61,6 +61,7 @@ class OpfRenderer extends XmlRenderer{
 		if(!$this->getValue('publicationDate'))
 			$this->setValue('publicationDate', date("Y-m-d"));
 
+
 		//If a static resource path is set (for css/images) then we want to make sure we provided a uniform path to prepend
 		if($this->getValue('staticResourcePath'))
 			$this->setValue('staticResourcePath', $this->addTrailingSlash($this->getValue('staticResourcePath')));
@@ -111,12 +112,15 @@ class OpfRenderer extends XmlRenderer{
 
 		array_walk($imageFiles, function(&$value)
 		{
+            //todo: need to move the static resources into the folder that we're building the html from
+            
 			$value = array(
 				'path' => $this->getValue('staticResourcePath') . $value,
 				'type' => $this->estimateMediaType($value),
 				'id'	=> rand(11111111,99999999)
 			);
 		});
+
 
 		foreach($imageFiles as $imageFile)
 		{
