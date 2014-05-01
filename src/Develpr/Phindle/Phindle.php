@@ -1,6 +1,8 @@
 <?php namespace Develpr\Phindle;
 
-
+/**
+ *	Main entry point for creating mobi document
+ */
 class Phindle{
 
 	private $content;
