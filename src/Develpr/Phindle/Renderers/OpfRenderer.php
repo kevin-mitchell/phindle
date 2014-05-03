@@ -80,6 +80,8 @@ class OpfRenderer extends XmlRenderer{
             $this->setValue('isbn', '');
         }
 
+		$this->setValue('ncxId', $this->getValue('uniqueId') . '_TOC');
+
 	}
 
 	private function buildManifest()
