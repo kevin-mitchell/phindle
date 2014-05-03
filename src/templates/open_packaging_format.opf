@@ -107,7 +107,7 @@
             http://www.niso.org/workrooms/daisy/Z39-86-2005.html#NCX
     -->
 
-    <spine toc="My_Table_of_Contents">
+    <spine toc="{ncxId}">
         <!-- the spine defines the linear reading order of the book -->
         {spine}
     </spine>
