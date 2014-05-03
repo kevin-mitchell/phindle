@@ -159,7 +159,7 @@ class OpfRenderer extends XmlRenderer{
 		{
 			/** @var ContentInterface $content */
 			if(!$this->getValue('manifestTemplate'))
-				$template = '<item id="{id}" media-type="{type}" href="{path}"/>' . "\n";
+				$template = '<itemref idref="{id}" />' . "\n";
 			else
 				$template = $this->getValue('manifestTemplate');
 

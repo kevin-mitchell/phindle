@@ -105,12 +105,34 @@ class Phindle{
         $this->fileHandler->writeTempFile($this->getAttribute('uniqueId') . '.opf', $this->opfRenderer->render($this->attributes, $this->content, $this->toc));
         $this->fileHandler->writeTempFile($this->getAttribute('uniqueId') . '.ncx', $this->ncxRenderer->render($this->attributes, $this->content));
 
-		die("HI");
+		$this->generateMobi();
 
         //Remove all temporary files
         $this->fileHandler->clean();
 
+		return true;
     }
+
+	private function generateMobi()
+	{
+		if(!$this->getAttribute('kindlegenPath'))
+			$kindlegenPath = exec('which kindlegen 2>&1');
+		else
+			$kindlegenPath = $this->getAttribute('kindlegenPath');
+
+		if(!$kindlegenPath)
+			throw new \Exception("The kindlegen command line tool path could not be found. Either set the kindlegenPath attribute, or make sure kindlegen is accessible in system.");
+
+		$command = 'cd ' . $this->fileHandler->getTempPath() . '; ' . $kindlegenPath . ' ' . $this->getAttribute('uniqueId') . '.opf';
+
+		$output = exec($command . " 2>&1");
+
+		$command = 'cd ' . $this->fileHandler->getTempPath() . '; ' . 'mv ' . $this->getAttribute('uniqueId') . '.mobi ' . $this->getAttribute('path');
+
+		$output = exec($command . " 2>&1");
+
+		return $output;
+	}
 
     public function valid()
     {
