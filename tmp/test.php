@@ -25,8 +25,8 @@ $phindle = new Phindle(array(
 	'path'	=> __dir__,
     'cover' => 'GraphicsWelcome/WImage-cover.gif',
     'isbn'  => '123456789123456',
-//    'staticResourcePath'    => '/var/www/phindle/tmp'
-    'staticResourcePath'    => '/Users/shoelessone/Sites/phindle/tmp'
+    'staticResourcePath'    => '/Users/shoelessone/Sites/phindle/tmp',
+	'kindlegenPath'		=> '/usr/local/bin/kindlegen'
 ));
 
 $phindle->setHtmlHelper($htmlHelper);
