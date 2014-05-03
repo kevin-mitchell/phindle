@@ -14,12 +14,44 @@ class Content implements ContentInterface{
 	private $title;
     private $position;
 	private $uniqueIdentifier;
+    private $htmlParser;
+    private $staticResourcePath;
 
-	function __construct()
+	function __construct($htmlElementExtractor = false)
 	{
+        $this->htmlParser = $htmlElementExtractor;
+
 		//We will use this unique identifier for the static resources that we'll need to generate
 		$this->uniqueIdentifier = round(time()/2) . "" . rand(11111, 99999);
 	}
+
+    /**
+     * A html parser
+     *
+     * @param HtmlElementExtractor $htmlParser
+     * @return $this
+     */
+    public function setHtmlParser(HtmlElementExtractor $htmlParser)
+    {
+        $this->htmlParser = $htmlParser;
+
+        return $this;
+    }
+
+    /**
+     * Allows you to specify a static resource path to be appended to <img> and <link> tags
+     *
+     * @param string $shouldAppend
+     * @return $this
+     */
+    public function setStaticResourcePath($path)
+    {
+        $this->staticResourcePath = $this->addTrailingSlash($path);
+
+
+
+        return $this;
+    }
 
     /**
      * Returns a unique Identifier
@@ -44,7 +76,40 @@ class Content implements ContentInterface{
 	 */
 	public function setHtml($html)
 	{
+        //todo: move this outside of "setHtml", because as of now it's not clear that this needs to be called
+        //todo:     after the static resource path has been set
+        //We may have a template that has css/image paths that are relative to a web root
+        if($this->staticResourcePath && $this->htmlParser)
+        {
+            $DOM = new \DOMDocument;
+            $DOM->loadHTML($html);
+
+            $imgs = $DOM->getElementsByTagName('img');
+
+            foreach($imgs as $image)
+            {
+                /** @var \DOMElement  $image */
+                $src = $this->removeLeadingSlash($image->getAttribute('src'));
+                $image->removeAttribute('src');
+                $image->setAttribute('src', $this->staticResourcePath . $src);
+            }
+
+            $links = $DOM->getElementsByTagName('link');
+            foreach($links as $link)
+            {
+                /** @var \DOMElement $link */
+                $href = $this->removeLeadingSlash($link->getAttribute('href'));
+                $link->removeAttribute('href');
+                $link->setAttribute('href', $this->staticResourcePath . $href);
+            }
+
+            $DOM->saveHTML();
+
+            $html = $DOM->saveHTML();
+        }
+
 		$this->html = $html;
+
 
 		return $this;
 	}
@@ -136,4 +201,26 @@ class Content implements ContentInterface{
 	{
 		return $this->sections;
 	}
+
+    //todo: this isn't dry, it's a copy/paste from the xmlrenderer
+    /**
+     * Removing a leading slash from a path
+     * @param $path
+     * @return mixed
+     */
+    protected function removeLeadingSlash($path)
+    {
+        return (substr($path, 0, 1) == '/' ? substr_replace($path, "", 0, 1) : $path);
+    }
+
+    /**
+     * Add a trailing slash to a path
+     *
+     * @param $path
+     * @return string
+     */
+    protected function addTrailingSlash($path)
+    {
+        return (substr($path, -1) == '/' ? $path : $path . '/');
+    }
 }
