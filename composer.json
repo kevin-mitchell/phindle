@@ -1,6 +1,10 @@
 {
     "name": "develpr/phindle",
-    "description": "Tool for creating simple Kindle (mobi) ebooks.",
+	 "license": "MIT",
+	 "type": "library",
+	 "description": "Creates full featured opf/ncx files for Kindle (mobi) ebooks and allows for images and other static resources",
+	 "keywords": ["ebook","kindle", "mobi", "opf", "book", "ncx"],
+	 "homepage": "http://github.com/develpr/phindle",
     "authors": [
         {
             "name": "Kevin Mitchell",
