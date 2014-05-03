@@ -29,12 +29,12 @@ class OpfRenderer extends XmlRenderer{
 	 * @param Templatish $templatish
 	 * @param HtmlElementExtractor $htmlParser
 	 */
-	public function __construct(Templatish $templatish = null, HtmlElementExtractor $htmlParser = null)
+	public function __construct(Templatish $templatish = null, HtmlHelper $htmlParser = null)
 	{
 		parent::__construct($templatish);
 
 		if(is_null($htmlParser))
-			$this->htmlParser = new HtmlElementExtractor();
+			$this->htmlParser = new HtmlHelper();
 		else
 			$this->htmlParser = $htmlParser;
 	}
@@ -105,22 +105,21 @@ class OpfRenderer extends XmlRenderer{
 				'path'	=> $content->getAnchorPath()
 			));
 
-			$images = $this->htmlParser->extractImg($content->getHtml());
+			$html = $content->getHtml();
+
+			$images = $this->htmlParser->extractImg($html);
 			$imageFiles = array_unique(array_merge($imageFiles, $images));
 
 		}
 
 		array_walk($imageFiles, function(&$value)
 		{
-            //todo: need to move the static resources into the folder that we're building the html from
-            
 			$value = array(
-				'path' => $this->getValue('staticResourcePath') . $value,
+				'path' => $this->htmlParser->getRelativeResourcePath($value),
 				'type' => $this->estimateMediaType($value),
-				'id'	=> rand(11111111,99999999)
+				'id'	=> rand(1111111111,9999999999)
 			);
 		});
-
 
 		foreach($imageFiles as $imageFile)
 		{
@@ -130,7 +129,7 @@ class OpfRenderer extends XmlRenderer{
         if($this->getValue('cover') !== false)
         {
             $manifest .= $this->templatish->buildTemplate($template, array(
-                'path'  => $this->getValue('staticResourcePath') . $this->data['cover'],
+                'path'  => $this->htmlParser->getRelativeResourcePath($this->data['cover']),
                 'type'  => $this->estimateMediaType($this->data['cover']),
                 'id'    => 'cover'
             )) . "\n";

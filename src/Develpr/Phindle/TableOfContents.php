@@ -12,7 +12,7 @@ class TableOfContents implements ContentInterface
     const tableOfContentsUniqueId = 'toc';
 
 
-    function __construct(Templatish $templatish, HtmlElementExtractor $elementExtractor)
+    function __construct(Templatish $templatish, HtmlHelper $elementExtractor)
     {
         $this->templatish = $templatish;
         $this->htmlExtractor = $elementExtractor;
