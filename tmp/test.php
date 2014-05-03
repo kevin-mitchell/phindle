@@ -14,6 +14,8 @@ $html3 = file_get_contents(__DIR__ . '/UG-C2.html');
 $html4 = file_get_contents(__DIR__ . '/UG-C3.html');
 $html5 = file_get_contents(__DIR__ . '/UG-C4.html');
 
+$htmlExtractor = new \Develpr\Phindle\HtmlElementExtractor();
+
 $phindle = new Phindle(array(
 	'title' => "First Mobi Book",
 	'publisher' => "Develpr",
@@ -28,9 +30,9 @@ $phindle = new Phindle(array(
 ));
 
 
-$content = new Content();
+$content = new Content($htmlExtractor);
 
-$content->setHtml($html1)->setTitle('Title 1')->setPosition(1)->setUniqueIdentifier('page_1');
+$content->setStaticResourcePath('/var/www/phindle/tmp')->setHtml($html1)->setTitle('Title 1')->setPosition(1)->setUniqueIdentifier('page_1');
 $content->setSections(array(
     1 => array(
        'id' => 'id_1.1',
@@ -50,15 +52,15 @@ $content->setSections(array(
     ),
 ));
 
-$content2 = new Content();
-$content3 = new Content();
-$content4 = new Content();
-$content5 = new Content();
+$content2 = new Content($htmlExtractor);
+$content3 = new Content($htmlExtractor);
+$content4 = new Content($htmlExtractor);
+$content5 = new Content($htmlExtractor);
 
-$content2->setHtml($html2)->setTitle('Title 2')->setPosition(2)->setUniqueIdentifier('UG-C1');
-$content3->setHtml($html3)->setTitle('Title 3')->setPosition(3)->setUniqueIdentifier('UG-C2');
-$content4->setHtml($html4)->setTitle('Title 4')->setPosition(4)->setUniqueIdentifier('UG-C3');
-$content5->setHtml($html5)->setTitle('Title 5')->setPosition(5)->setUniqueIdentifier('UG-C4');
+$content2->setTitle('Title 2')->setPosition(2)->setUniqueIdentifier('UG-C1')->setStaticResourcePath('/var/www/phindle/tmp')->setHtml($html2);
+$content3->setStaticResourcePath('/var/www/phindle/tmp')->setHtml($html3)->setTitle('Title 3')->setPosition(3)->setUniqueIdentifier('UG-C2');
+$content4->setStaticResourcePath('/var/www/phindle/tmp')->setHtml($html4)->setTitle('Title 4')->setPosition(4)->setUniqueIdentifier('UG-C3');
+$content5->setStaticResourcePath('/var/www/phindle/tmp')->setHtml($html5)->setTitle('Title 5')->setPosition(5)->setUniqueIdentifier('UG-C4');
 
 $phindle->addContent($content5);
 $phindle->addContent($content4);
