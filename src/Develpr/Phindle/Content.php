@@ -14,7 +14,7 @@ class Content implements ContentInterface{
 	private $title;
     private $position;
 	private $uniqueIdentifier;
-    private $htmlParser;
+    private $htmlHelper;
     private $staticResourcePath;
 
 	function __construct($htmlElementExtractor = false)
@@ -48,8 +48,6 @@ class Content implements ContentInterface{
     {
         $this->staticResourcePath = $this->addTrailingSlash($path);
 
-
-
         return $this;
     }
 
@@ -76,40 +74,7 @@ class Content implements ContentInterface{
 	 */
 	public function setHtml($html)
 	{
-        //todo: move this outside of "setHtml", because as of now it's not clear that this needs to be called
-        //todo:     after the static resource path has been set
-        //We may have a template that has css/image paths that are relative to a web root
-        if($this->staticResourcePath && $this->htmlParser)
-        {
-            $DOM = new \DOMDocument;
-            $DOM->loadHTML($html);
-
-            $imgs = $DOM->getElementsByTagName('img');
-
-            foreach($imgs as $image)
-            {
-                /** @var \DOMElement  $image */
-                $src = $this->removeLeadingSlash($image->getAttribute('src'));
-                $image->removeAttribute('src');
-                $image->setAttribute('src', $this->staticResourcePath . $src);
-            }
-
-            $links = $DOM->getElementsByTagName('link');
-            foreach($links as $link)
-            {
-                /** @var \DOMElement $link */
-                $href = $this->removeLeadingSlash($link->getAttribute('href'));
-                $link->removeAttribute('href');
-                $link->setAttribute('href', $this->staticResourcePath . $href);
-            }
-
-            $DOM->saveHTML();
-
-            $html = $DOM->saveHTML();
-        }
-
 		$this->html = $html;
-
 
 		return $this;
 	}

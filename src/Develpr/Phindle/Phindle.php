@@ -12,6 +12,11 @@ class Phindle{
     private $opfRenderer;
     private $ncxRenderer;
 
+	/**
+	 * @var HtmlHelper
+	 */
+	private $htmlHelper;
+
     /**
      * @param array $data
      * @param FileHandler $fileHandler
@@ -22,21 +27,29 @@ class Phindle{
 	{
 		$this->attributes = $data;
 
+		$this->htmlHelper = false;
+
 		$this->content = array();
 
-        if(is_null($fileHandler))
+		if(is_null($fileHandler))
 		    $this->createFileHandler();
         else
             $this->fileHandler = $fileHandler;
 
-        if(is_null($opfRenderer))
-            $this->opfRenderer = new OpfRenderer(new Templatish(), new HtmlElementExtractor());
+		//todo: this shouldn't be here, consider passing in as a parameter?
+		$htmlHelper = new HtmlHelper();
+		$htmlHelper->setAbsoluteStaticResourcePath($this->getAttribute('staticResourcePath'));
+		$htmlHelper->setTempDirectory($this->fileHandler->getTempPath());
+
+
+		if(is_null($opfRenderer))
+            $this->opfRenderer = new OpfRenderer(new Templatish(), $htmlHelper);
 
         if(is_null($ncxRenderer))
             $this->ncxRenderer = new NcxRenderer(new Templatish());
 
         if(is_null($tableOfContents))
-            $this->toc = new TableOfContents(new Templatish(), new HtmlElementExtractor());
+            $this->toc = new TableOfContents(new Templatish(), $htmlHelper);
 
     }
 
@@ -51,12 +64,13 @@ class Phindle{
         $result = $this->validate();
 
         if(count($result) > 0)
-            throw new \Exception("Invalid Phidle. Additional configuration options required. " . implode('. ', $result));
+            throw new \Exception("Invalid Phindle setup. Additional configuration options required. " . implode('. ', $result));
 
 		$this->generateUniqueId();
 
         $this->sortContent();
 
+		//Get the first content item
         $this->setAttribute('start',reset($this->content)->getAnchorPath());
 
         //If a default instance of TableOfContents provided by this package was used then we need to tell
@@ -75,16 +89,24 @@ class Phindle{
 
         $this->setAttribute('toc', $this->toc->getAnchorPath());
 
+		//Now we need to generate and write out the static html files for kindlegen to process
+		foreach($this->content as $content)
+		{
+			$html = $content->getHtml();
+
+			//If ingredients are provided then we'll try to automatically set relative static resource paths in html files
+			if($this->htmlHelper && $this->attributeExists('staticResourcePath'))
+				$html = $this->htmlHelper->appendRelativeResourcePaths($html);
+
+			/** @var \Develpr\Phindle\ContentInterface $content */
+			$this->fileHandler->writeTempFile($content->getUniqueIdentifier() . '.html', $html);
+		}
+
         $this->fileHandler->writeTempFile($this->getAttribute('uniqueId') . '.opf', $this->opfRenderer->render($this->attributes, $this->content, $this->toc));
         $this->fileHandler->writeTempFile($this->getAttribute('uniqueId') . '.ncx', $this->ncxRenderer->render($this->attributes, $this->content));
 
-        foreach($this->content as $content)
-        {
-            /** @var \Develpr\Phindle\ContentInterface $content */
-            $this->fileHandler->writeTempFile($content->getUniqueIdentifier() . '.html', $content->getHtml());
-        }
-
 		die("HI");
+
         //Remove all temporary files
         $this->fileHandler->clean();
 
@@ -251,6 +273,27 @@ class Phindle{
     {
         return $this->toc;
     }
+
+	/**
+	 * @param mixed $htmlHelper
+	 */
+	public function setHtmlHelper(HtmlHelper $htmlHelper)
+	{
+		$htmlHelper->setAbsoluteStaticResourcePath($this->getAttribute('staticResourcePath'));
+		$htmlHelper->setTempDirectory($this->fileHandler->getTempPath());
+
+		$this->htmlHelper = $htmlHelper;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getHtmlHelper()
+	{
+		return $this->htmlHelper;
+	}
+
+
 
 
 }

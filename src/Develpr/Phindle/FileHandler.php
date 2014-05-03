@@ -4,6 +4,7 @@ class FileHandler{
 
     private $basePath;
     private $tempDirectory;
+	private $tempPath;
 
     public function __construct($basePath, $tempDirectory)
     {
@@ -16,6 +17,8 @@ class FileHandler{
         $this->tempDirectory = $this->addTrailingSlash($this->removeLeadingSlash($tempDirectory));
 
         mkdir($this->basePath . $this->tempDirectory);
+
+		$this->tempPath = $this->basePath . $this->tempDirectory;
     }
 
     public function writeTempFile($filename, $fileContents)
@@ -30,7 +33,18 @@ class FileHandler{
 		return $success !== false;
 	}
 
-    public function clean()
+	public function getTempDirectory()
+	{
+		return $this->tempDirectory;
+	}
+
+	public function getTempPath()
+	{
+		return $this->tempPath;
+	}
+
+
+	public function clean()
     {
         $files = glob($this->basePath . $this->tempDirectory . '*', GLOB_MARK);
         foreach ($files as $file) {
