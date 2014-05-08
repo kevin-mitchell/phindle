@@ -41,7 +41,8 @@ class Phindle{
 		$htmlHelper->setAbsoluteStaticResourcePath($this->getAttribute('staticResourcePath'));
 		$htmlHelper->setTempDirectory($this->fileHandler->getTempPath());
 
-
+		$this->htmlHelper = $htmlHelper;
+		
 		if(is_null($opfRenderer))
             $this->opfRenderer = new OpfRenderer(new Templatish(), $htmlHelper);
 
