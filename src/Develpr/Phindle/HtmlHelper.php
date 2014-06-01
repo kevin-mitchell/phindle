@@ -111,7 +111,7 @@ class HtmlHelper{
                     $filename = basename($src);
                     if(!file_exists($this->getTempDirectory() . '../' . $filename))
                         file_put_contents($this->getTempDirectory() . '../' . $filename, fopen($src, 'r'));
-                    $image->setAttribute('src', $filename);
+                    $image->setAttribute('src', '../' . $filename);
                 }
             }
             else
