@@ -15,6 +15,7 @@ class HtmlHelper{
 	private $tempDirectory;
 	private $absoluteStaticResourcePath;
 	private $relativePath;
+    private $downloadImages;
 
 	/**
 	 * Extract a tag (<a> <img> <h2> etc) from
@@ -87,6 +88,7 @@ class HtmlHelper{
 
 	public function appendRelativeResourcePaths($html)
 	{
+
 		if(!$this->getAbsoluteStaticResourcePath() || !$this->getTempDirectory())
 			return $html;
 
@@ -101,7 +103,21 @@ class HtmlHelper{
 			/** @var \DOMElement  $image */
 			$src = $this->removeLeadingSlash($image->getAttribute('src'));
 			$image->removeAttribute('src');
-			$image->setAttribute('src', $this->getRelativeResourcePath($src));
+
+            if($this->isUrl($src))
+            {
+                if($this->getDownloadImages())
+                {
+                    $filename = basename($src);
+                    if(!file_exists($this->getTempDirectory() . '../' . $filename))
+                        file_put_contents($this->getTempDirectory() . '../' . $filename, fopen($src, 'r'));
+                    $image->setAttribute('src', $filename);
+                }
+            }
+            else
+            {
+                $image->setAttribute('src', $this->getRelativeResourcePath($src));
+            }
 		}
 
 		$links = $DOM->getElementsByTagName('link');
@@ -125,6 +141,20 @@ class HtmlHelper{
 	{
 		return $this->getRelativePath() . $path;
 	}
+
+    public function isUrl($candidate)
+    {
+        $regex = "((https?|ftp)\:\/\/)?"; // SCHEME
+        $regex .= "([a-z0-9+!*(),;?&=\$_.-]+(\:[a-z0-9+!*(),;?&=\$_.-]+)?@)?"; // User and Pass
+        $regex .= "([a-z0-9-.]*)\.([a-z]{2,3})"; // Host or IP
+        $regex .= "(\:[0-9]{2,5})?"; // Port
+        $regex .= "(\/([a-z0-9+\$_-]\.?)+)*\/?"; // Path
+        $regex .= "(\?[a-z+&\$_.-][a-z0-9;:@&%=+\/\$_.-]*)?"; // GET Query
+        $regex .= "(#[a-z_.-][a-z0-9+\$_.-]*)?"; // Anchor
+
+        return preg_match("/^$regex$/", $candidate);
+
+    }
 
 	/**
 	 * Calculates a relative path between two absolute baths.
@@ -254,6 +284,22 @@ class HtmlHelper{
 	{
 		return $this->relativePath;
 	}
+
+    /**
+     * @param mixed $downloadImages
+     */
+    public function setDownloadImages($downloadImages)
+    {
+        $this->downloadImages = $downloadImages;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDownloadImages()
+    {
+        return $this->downloadImages;
+    }
 
 
 

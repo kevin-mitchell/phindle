@@ -40,9 +40,10 @@ class Phindle{
 		$htmlHelper = new HtmlHelper();
 		$htmlHelper->setAbsoluteStaticResourcePath($this->getAttribute('staticResourcePath'));
 		$htmlHelper->setTempDirectory($this->fileHandler->getTempPath());
+		$htmlHelper->setDownloadImages($this->getAttribute('downloadImages')); //will default to false if not set
 
-		$this->htmlHelper = $htmlHelper;
-		
+        $this->htmlHelper = $htmlHelper;
+
 		if(is_null($opfRenderer))
             $this->opfRenderer = new OpfRenderer(new Templatish(), $htmlHelper);
 
