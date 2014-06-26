@@ -202,10 +202,11 @@ class Phindle{
 		//If no uniqueId is set, then the mobi file wasn't generated
 		if(!$this->getAttribute('uniqueId'))
 			return false;
-		
-		$mobiPath = $this->getHtmlHelper()->addTrailingSlash($this->getAttribute('path'));
+
+		$mobiPath = substr($this->getAttribute('path'), -1) == '/' ? $this->getAttribute('path') : $this->getAttribute('path') . '/';
 		$mobiPath .= $this->getAttribute('uniqueId') . '.mobi';
-		return $mobiPath; 
+
+		return $mobiPath;
 	}
 
 
