@@ -24,6 +24,6 @@ You may need to adjust permissions in your environment - Phindle creates a numbe
 
 Check out a video walkthrough of the features/use of Phindle below:
 
-
+[![ScreenShot](http://www.develpr.com/uploads/images/phindle_video_image.jpg)](https://www.youtube.com/watch?v=H-2a8ol7Fjo)
 
 
